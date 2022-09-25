@@ -1,0 +1,10 @@
+---
+- name: Start Vector
+  become: true
+  ansible.builtin.systemd:
+    name: vector
+    state: restarted
+    enabled: true
+  when:
+    - ansible_virtualization_type != "docker"
+    - ansible_virtualization_type != "podman"

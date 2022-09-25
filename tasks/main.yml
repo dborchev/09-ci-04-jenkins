@@ -1,0 +1,31 @@
+---
+- name: Install Vector RPM Distrib
+  ansible.builtin.yum:
+    name: "https://packages.timber.io/vector/{{ vector_version }}/vector-{{ vector_version }}-1.{{ vector_arch }}.rpm"
+    state: present
+    disable_gpg_check: True
+  when: ansible_distribution == "CentOS"
+- name: Install Vector DEB Distrib
+  ansible.builtin.apt:
+    deb: "https://packages.timber.io/vector/{{ vector_version }}/vector_{{ vector_version }}-1_amd64.deb"
+    state: present
+  when: ansible_distribution == "Ubuntu"
+- name: Copy Service Script
+  become: true
+  ansible.builtin.template:
+   src: "vector.service.j2"
+   dest: "/etc/systemd/system/vector.service"
+   mode: 0644
+   owner: root
+   group: root
+- name: Configure Vector
+  become: true
+  ansible.builtin.template:
+    src: vector.j2
+    dest: "/etc/vector/vector.toml"
+    mode: 0644
+    owner: ec2-user
+    group: ec2-user
+  notify: Start Vector
+- name: Force Service Start
+  ansible.builtin.meta: flush_handlers

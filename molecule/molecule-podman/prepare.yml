@@ -1,0 +1,15 @@
+---
+
+- name: Prepare Test Hosts
+  hosts: all
+  tasks:
+     - name: Create group
+       ansible.builtin.group:
+          name: ec2-user
+          state: present
+     - name: Create user
+       ansible.builtin.user:
+          name: ec2-user
+          state: present
+          shell: /bin/bash
+          group: ec2-user

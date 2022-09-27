@@ -3,38 +3,7 @@
 - name: Verify
   hosts: all
   gather_facts: false
-  vars_files:
-    - "../../vars/main.yml"
-  pre_tasks:
-  - name: Print Expected Vector Vesrsion
-    debug:
-      msg: "{{ vector_version }}"
-  - name: Get Vector Version
-    ansible.builtin.command: "vector --version"
-    changed_when: false
-    register: vector_version_cmd
-  - name: Extract Vector Version String
-    ansible.builtin.set_fact:
-      vector_version_fact: "{{ vector_version_cmd.stdout.split()[1] }}"
-  - name: Get Vector Validate Config
-    ansible.builtin.command: "vector validate --no-environment --config-toml /etc/vector/vector.toml"
-    changed_when: false
-    register: vector_validate
   tasks:
-  - name: Assert Vector Installed
+  - name: Assert Installed
     ansible.builtin.assert:
-      that: "'{{ vector_version_cmd.rc }}' == '0'"
-  - name: Assert Vector Version
-    ansible.builtin.assert:
-      that: "'{{ vector_version_fact }}' == '{{ vector_version }}'"
-  - name: Assert Vector Config Validated
-    ansible.builtin.assert:
-      that: "'{{ vector_validate.rc }}' == '0'"
-  post_tasks:
-  - name: Print Vector Version Output
-    debug:
-       msg: "{{ vector_version_cmd.stdout }}; Extracted: {{ vector_version_fact }}"
-  - name: Pring Vector Config Validate Output
-    debug:
-      msg: "{{ vector_validate.stdout }}"
-
+      that: true

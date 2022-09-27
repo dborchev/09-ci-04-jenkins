@@ -1,6 +1,6 @@
 node("jenkins-agent.netology.askbow.io"){
     stage("Git checkout"){
-        git credentialsId: '1812fb9e-68ae-4732-99dc-b7d0b0a8deb5', url: 'git@github.com:dborchev/09-ci-04-jenkins.git'
+        git branch: 'main', credentialsId: '1812fb9e-68ae-4732-99dc-b7d0b0a8deb5', url: 'git@github.com:dborchev/09-ci-04-jenkins.git'
     }
     stage("Check if Prod"){
         prod_run=false

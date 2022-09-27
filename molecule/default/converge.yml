@@ -4,4 +4,4 @@
   tasks:
     - name: "Include vector"
       include_role:
-        name: "vector"
+        name: "09-ci-04-jenkins"
